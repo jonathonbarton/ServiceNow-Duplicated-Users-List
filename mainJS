@@ -1,0 +1,15 @@
+gs.print(getDuplicates('sys_user','user_name'));
+function getDuplicates(tablename,val) {
+var dupRecords = [];
+var gaDupCheck = new GlideAggregate(tablename);
+gaDupCheck.addQuery('active','true');
+gaDupCheck.addAggregate('COUNT',val);
+gaDupCheck.addNotNullQuery(val);
+gaDupCheck.groupBy(val);
+gaDupCheck.addHaving('COUNT', '>', 1);
+gaDupCheck.query();
+while (gaDupCheck.next()) {
+dupRecords.push(gaDupCheck[val].toString());  
+}
+return dupRecords;
+}
